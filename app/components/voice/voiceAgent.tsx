@@ -296,6 +296,22 @@ export function VoiceAgent() {
 
       sessionRef.current = session;
 
+      // Make the assistant speak first: trigger her opening statement
+      // (the exact wording lives in the system instruction).
+      try {
+        session.sendClientContent({
+          turns: [
+            {
+              role: "user",
+              parts: [{ text: "Begin the conversation now by greeting me with your opening line." }],
+            },
+          ],
+          turnComplete: true,
+        });
+      } catch (e) {
+        console.error("Failed to trigger opening greeting:", e);
+      }
+
       // 5. Initialize Input (Recording) Audio Context (16kHz)
       const inputContext = new AudioContext({ sampleRate: 16000 });
       inputContextRef.current = inputContext;
