@@ -1,215 +1,334 @@
-.container {
+/* ============================================================
+   Orb — web recreation of metasidd/Orb (SwiftUI)
+   Layered gradient + rotating crescent glows + wavy blobs +
+   core glows + floating particles + rim light, masked to a
+   circle, with a colored outer shadow. Additive blending via
+   `screen` (broadly supported analogue of SwiftUI plusLighter).
+   ============================================================ */
+
+.wrap {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 320px;
-  height: 320px;
-  cursor: pointer;
+  gap: 28px;
   user-select: none;
-  --transition-speed: 0.5s;
 }
 
-/* Base definitions for state variables */
-.orb.idle {
-  --glow-color: rgba(99, 102, 241, 0.6);
-  --bg-gradient: radial-gradient(circle at 30% 30%, #4f46e5, #312e81 80%);
-}
-.orb.listening {
-  --glow-color: rgba(20, 184, 166, 0.8);
-  --bg-gradient: radial-gradient(circle at 30% 30%, #0d9488, #115e59 80%);
-}
-.orb.thinking {
-  --glow-color: rgba(245, 158, 11, 0.7);
-  --bg-gradient: radial-gradient(circle at 30% 30%, #d97706, #78350f 80%);
-}
-.orb.speaking {
-  --glow-color: rgba(236, 72, 153, 0.8);
-  --bg-gradient: radial-gradient(circle at 30% 30%, #db2777, #831843 80%);
-}
-
-.ambientGlow.idle { --ambient-color: rgba(99, 102, 241, 0.25); }
-.ambientGlow.listening { --ambient-color: rgba(20, 184, 166, 0.45); }
-.ambientGlow.thinking { --ambient-color: rgba(245, 158, 11, 0.35); }
-.ambientGlow.speaking { --ambient-color: rgba(236, 72, 153, 0.45); }
-
-/* Ambient glow in the background */
-.ambientGlow {
-  position: absolute;
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  background: var(--ambient-color);
-  filter: blur(60px);
-  z-index: 1;
-  transition: background var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1), 
-              transform 0.2s ease-out, 
-              opacity var(--transition-speed) ease;
-}
-
-/* Core Orb Sphere */
-.orb {
+.stage {
   position: relative;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: var(--bg-gradient);
-  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.15s ease-out,
-              transform 0.15s ease-out;
+  width: 260px;
+  height: 260px;
+}
+
+/* ---- Per-state theming (gradient stops, glow, accent, speed) ---- */
+.orb.idle,
+.ambient.idle {
+  --c1: #312e81;
+  --c2: #4f46e5;
+  --c3: #a5b4fc;
+  --glow: rgba(199, 210, 254, 0.92);
+  --accent: rgba(99, 102, 241, 0.55);
+  --speed: 34;
+}
+.orb.listening,
+.ambient.listening {
+  --c1: #134e4a;
+  --c2: #0d9488;
+  --c3: #5eead4;
+  --glow: rgba(204, 251, 241, 0.95);
+  --accent: rgba(20, 184, 166, 0.6);
+  --speed: 64;
+}
+.orb.thinking,
+.ambient.thinking {
+  --c1: #7c2d12;
+  --c2: #ea580c;
+  --c3: #fcd34d;
+  --glow: rgba(254, 243, 199, 0.95);
+  --accent: rgba(245, 158, 11, 0.6);
+  --speed: 120;
+}
+.orb.speaking,
+.ambient.speaking {
+  --c1: #831843;
+  --c2: #db2777;
+  --c3: #f9a8d4;
+  --glow: rgba(252, 231, 243, 0.97);
+  --accent: rgba(236, 72, 153, 0.62);
+  --speed: 88;
+}
+
+/* ---- Outer colored shadow / ambient halo ---- */
+.ambient {
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: var(--accent);
+  filter: blur(72px);
+  z-index: 0;
+  transition: background 0.6s ease, opacity 0.4s ease, transform 0.15s ease-out;
+}
+
+/* ---- The orb (mask + isolation for blending) ---- */
+.orb {
+  --intensity: 1;
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  isolation: isolate;
+  z-index: 1;
+  cursor: pointer;
+  transition: transform 0.12s ease-out;
+  box-shadow:
+    0 14px 44px -10px var(--accent),
+    0 6px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Glassy shimmer / reflection effect */
-.reflection {
+/* ---- Shared layer geometry ---- */
+.background,
+.depthGlow,
+.outerRing,
+.blob1,
+.blob2,
+.coreGlow1,
+.coreGlow2,
+.core,
+.particles,
+.rim {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    transparent 50%
-  );
   pointer-events: none;
-  z-index: 5;
 }
 
-/* Core Element inside the Orb */
-.core {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.95);
-  filter: blur(2px);
+/* ---- Base gradient (bottom -> top) ---- */
+.background {
+  background: linear-gradient(to top, var(--c1) 0%, var(--c2) 55%, var(--c3) 100%);
+  transition: background 0.6s ease;
+  z-index: 1;
+}
+
+/* ---- Depth crescent glow (slow, counter-clockwise) ---- */
+.depthGlow {
+  background: radial-gradient(circle at 50% 20%, var(--glow), transparent 55%);
+  filter: blur(16px);
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  z-index: 2;
+  animation: spinCcw calc(540s / var(--speed)) linear infinite;
+}
+
+/* ---- Outer ring crescent (very slow, clockwise, inset) ---- */
+.outerRing {
+  inset: 7px;
+  background: radial-gradient(circle at 50% 18%, var(--glow), transparent 48%);
+  filter: blur(10px);
+  mix-blend-mode: screen;
+  opacity: 0.35;
+  z-index: 2;
+  animation: spinCw calc(1440s / var(--speed)) linear infinite;
+}
+
+/* ---- Wavy organic blobs ---- */
+.blob1 {
+  width: 116%;
+  height: 116%;
+  top: 16%;
+  left: -8%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6), transparent 62%);
+  filter: blur(9px);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  z-index: 3;
+  animation:
+    morph calc(126s / var(--speed)) ease-in-out infinite,
+    spinCw calc(240s / var(--speed)) linear infinite;
+}
+.blob2 {
+  width: 80%;
+  height: 80%;
+  top: -16%;
+  left: 12%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.85), transparent 60%);
+  filter: blur(9px);
+  mix-blend-mode: screen;
+  opacity: 0.4;
+  z-index: 3;
+  animation:
+    morph2 calc(160s / var(--speed)) ease-in-out infinite,
+    spinCcw calc(480s / var(--speed)) linear infinite;
+}
+
+/* ---- Core glows (fast, clockwise) ---- */
+.coreGlow1 {
+  background: radial-gradient(circle at 50% 30%, var(--glow), transparent 50%);
+  filter: blur(18px);
+  mix-blend-mode: screen;
+  opacity: var(--intensity);
   z-index: 4;
-  animation: floatCore 4s ease-in-out infinite;
+  animation: spinCw calc(120s / var(--speed)) linear infinite;
+}
+.coreGlow2 {
+  background: radial-gradient(circle at 50% 32%, var(--glow), transparent 45%);
+  filter: blur(13px);
+  mix-blend-mode: screen;
+  opacity: calc(var(--intensity) * 0.8);
+  z-index: 4;
+  animation: spinCw calc(156s / var(--speed)) linear infinite;
 }
 
-/* Outer Ring 1 */
-.ring {
+/* ---- Bright central core ---- */
+.core {
+  width: 46%;
+  height: 46%;
+  inset: 27%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0.25) 45%,
+    transparent 70%
+  );
+  filter: blur(6px);
+  mix-blend-mode: screen;
+  z-index: 5;
+  animation: pulseCore 4s ease-in-out infinite;
+}
+
+/* ---- Floating particles ---- */
+.particles {
+  overflow: hidden;
+  mix-blend-mode: screen;
+  z-index: 6;
+}
+.particle {
   position: absolute;
-  width: 130%;
-  height: 130%;
+  bottom: -8%;
+  left: calc(var(--p) * 6.25%);
+  width: 3px;
+  height: 3px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.08);
-  border-top: 2px solid rgba(255, 255, 255, 0.35);
-  z-index: 3;
-  animation: rotateRight 8s linear infinite;
-  pointer-events: none;
+  background: #fff;
+  opacity: 0;
+  filter: blur(0.5px);
+  animation: floatUp calc(360s / var(--speed)) linear infinite;
+  animation-delay: calc(var(--p) * -0.65s);
 }
 
-/* Outer Ring 2 */
-.ring2 {
-  position: absolute;
-  width: 145%;
-  height: 145%;
-  border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, 0.05);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.25);
-  z-index: 3;
-  animation: rotateLeft 12s linear infinite;
-  pointer-events: none;
+/* ---- Realistic rim / inner glow (brighter near bottom) ---- */
+.rim {
+  z-index: 7;
+  mix-blend-mode: screen;
+  box-shadow:
+    inset 0 0 4px rgba(255, 255, 255, 0.5),
+    inset 0 -3px 16px rgba(255, 255, 255, 0.4),
+    inset 0 6px 26px rgba(255, 255, 255, 0.16);
 }
 
-/* Speeds up animations when listening, thinking, or speaking */
-.orb.listening .ring {
-  animation-duration: 4s;
-  border-top-color: rgba(20, 184, 166, 0.7);
-}
-.orb.listening .ring2 {
-  animation-duration: 6s;
-  border-bottom-color: rgba(20, 184, 166, 0.5);
-}
-
-.orb.thinking .ring {
-  animation-duration: 2s;
-  border-top-color: rgba(245, 158, 11, 0.7);
-}
-.orb.thinking .ring2 {
-  animation-duration: 3s;
-  border-bottom-color: rgba(245, 158, 11, 0.5);
-}
-
-.orb.speaking .ring {
-  animation: rotateRight 3s linear infinite, speakingWobble 1.5s ease-in-out infinite alternate;
-  border-top-color: rgba(236, 72, 153, 0.7);
-}
-.orb.speaking .ring2 {
-  animation: rotateLeft 4.5s linear infinite, speakingWobble2 2s ease-in-out infinite alternate;
-  border-bottom-color: rgba(236, 72, 153, 0.5);
-}
-
-/* Status visual text beneath the Orb */
+/* ============================================================
+   Status label
+   ============================================================ */
 .statusLabel {
-  margin-top: 32px;
-  font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: "Outfit", "Inter", system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 500;
-  z-index: 10;
   height: 20px;
+  z-index: 10;
 }
-
 .idleText {
   color: #818cf8;
   animation: pulseOpacity 2s ease-in-out infinite;
 }
-
 .listeningText {
   color: #2dd4bf;
-  text-shadow: 0 0 10px rgba(45, 212, 191, 0.4);
+  text-shadow: 0 0 12px rgba(45, 212, 191, 0.45);
 }
-
 .thinkingText {
   color: #fbbf24;
   animation: pulseOpacity 0.8s ease-in-out infinite;
 }
-
 .speakingText {
   color: #f472b6;
-  text-shadow: 0 0 10px rgba(244, 114, 182, 0.4);
+  text-shadow: 0 0 12px rgba(244, 114, 182, 0.45);
 }
 
-/* Keyframe Animations */
-@keyframes rotateRight {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* ============================================================
+   Keyframes
+   ============================================================ */
+@keyframes spinCw {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinCcw {
+  to {
+    transform: rotate(-360deg);
+  }
 }
 
-@keyframes rotateLeft {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(-360deg); }
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%;
+  }
+  50% {
+    border-radius: 58% 42% 45% 55% / 55% 58% 42% 45%;
+  }
+}
+@keyframes morph2 {
+  0%,
+  100% {
+    border-radius: 55% 45% 48% 52% / 42% 55% 45% 58%;
+  }
+  50% {
+    border-radius: 45% 55% 58% 42% / 58% 45% 55% 42%;
+  }
 }
 
-@keyframes floatCore {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-3px, -5px) scale(1.05); }
+@keyframes pulseCore {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: calc(var(--intensity) * 0.75);
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: var(--intensity);
+  }
 }
 
-@keyframes speakingWobble {
-  0% { border-radius: 50% 45% 52% 48%; }
-  100% { border-radius: 47% 53% 45% 55%; }
-}
-
-@keyframes speakingWobble2 {
-  0% { border-radius: 46% 54% 48% 52%; }
-  100% { border-radius: 53% 47% 55% 45%; }
+@keyframes floatUp {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.7;
+  }
+  85% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate(10px, -240px);
+    opacity: 0;
+  }
 }
 
 @keyframes pulseOpacity {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
