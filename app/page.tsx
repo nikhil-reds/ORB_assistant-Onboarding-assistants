@@ -1,5 +1,5 @@
-import { Orb } from "@/components/orb/Orb";
-import { VoiceAgent } from "@/components/voice/VoiceAgent"; 
+import { Orb } from "@/components/orb/orb";
+import { VoiceAgent } from "@/components/voice/voiceAgent";
 
 export default function Home() {
   return (
