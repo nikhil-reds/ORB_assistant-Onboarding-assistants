@@ -1,0 +1,215 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 320px;
+  height: 320px;
+  cursor: pointer;
+  user-select: none;
+  --transition-speed: 0.5s;
+}
+
+/* Base definitions for state variables */
+.orb.idle {
+  --glow-color: rgba(99, 102, 241, 0.6);
+  --bg-gradient: radial-gradient(circle at 30% 30%, #4f46e5, #312e81 80%);
+}
+.orb.listening {
+  --glow-color: rgba(20, 184, 166, 0.8);
+  --bg-gradient: radial-gradient(circle at 30% 30%, #0d9488, #115e59 80%);
+}
+.orb.thinking {
+  --glow-color: rgba(245, 158, 11, 0.7);
+  --bg-gradient: radial-gradient(circle at 30% 30%, #d97706, #78350f 80%);
+}
+.orb.speaking {
+  --glow-color: rgba(236, 72, 153, 0.8);
+  --bg-gradient: radial-gradient(circle at 30% 30%, #db2777, #831843 80%);
+}
+
+.ambientGlow.idle { --ambient-color: rgba(99, 102, 241, 0.25); }
+.ambientGlow.listening { --ambient-color: rgba(20, 184, 166, 0.45); }
+.ambientGlow.thinking { --ambient-color: rgba(245, 158, 11, 0.35); }
+.ambientGlow.speaking { --ambient-color: rgba(236, 72, 153, 0.45); }
+
+/* Ambient glow in the background */
+.ambientGlow {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: var(--ambient-color);
+  filter: blur(60px);
+  z-index: 1;
+  transition: background var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.2s ease-out, 
+              opacity var(--transition-speed) ease;
+}
+
+/* Core Orb Sphere */
+.orb {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--bg-gradient);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.15s ease-out,
+              transform 0.15s ease-out;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Glassy shimmer / reflection effect */
+.reflection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Core Element inside the Orb */
+.core {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.95);
+  filter: blur(2px);
+  z-index: 4;
+  animation: floatCore 4s ease-in-out infinite;
+}
+
+/* Outer Ring 1 */
+.ring {
+  position: absolute;
+  width: 130%;
+  height: 130%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-top: 2px solid rgba(255, 255, 255, 0.35);
+  z-index: 3;
+  animation: rotateRight 8s linear infinite;
+  pointer-events: none;
+}
+
+/* Outer Ring 2 */
+.ring2 {
+  position: absolute;
+  width: 145%;
+  height: 145%;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.05);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+  z-index: 3;
+  animation: rotateLeft 12s linear infinite;
+  pointer-events: none;
+}
+
+/* Speeds up animations when listening, thinking, or speaking */
+.orb.listening .ring {
+  animation-duration: 4s;
+  border-top-color: rgba(20, 184, 166, 0.7);
+}
+.orb.listening .ring2 {
+  animation-duration: 6s;
+  border-bottom-color: rgba(20, 184, 166, 0.5);
+}
+
+.orb.thinking .ring {
+  animation-duration: 2s;
+  border-top-color: rgba(245, 158, 11, 0.7);
+}
+.orb.thinking .ring2 {
+  animation-duration: 3s;
+  border-bottom-color: rgba(245, 158, 11, 0.5);
+}
+
+.orb.speaking .ring {
+  animation: rotateRight 3s linear infinite, speakingWobble 1.5s ease-in-out infinite alternate;
+  border-top-color: rgba(236, 72, 153, 0.7);
+}
+.orb.speaking .ring2 {
+  animation: rotateLeft 4.5s linear infinite, speakingWobble2 2s ease-in-out infinite alternate;
+  border-bottom-color: rgba(236, 72, 153, 0.5);
+}
+
+/* Status visual text beneath the Orb */
+.statusLabel {
+  margin-top: 32px;
+  font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  z-index: 10;
+  height: 20px;
+}
+
+.idleText {
+  color: #818cf8;
+  animation: pulseOpacity 2s ease-in-out infinite;
+}
+
+.listeningText {
+  color: #2dd4bf;
+  text-shadow: 0 0 10px rgba(45, 212, 191, 0.4);
+}
+
+.thinkingText {
+  color: #fbbf24;
+  animation: pulseOpacity 0.8s ease-in-out infinite;
+}
+
+.speakingText {
+  color: #f472b6;
+  text-shadow: 0 0 10px rgba(244, 114, 182, 0.4);
+}
+
+/* Keyframe Animations */
+@keyframes rotateRight {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotateLeft {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes floatCore {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-3px, -5px) scale(1.05); }
+}
+
+@keyframes speakingWobble {
+  0% { border-radius: 50% 45% 52% 48%; }
+  100% { border-radius: 47% 53% 45% 55%; }
+}
+
+@keyframes speakingWobble2 {
+  0% { border-radius: 46% 54% 48% 52%; }
+  100% { border-radius: 53% 47% 55% 45%; }
+}
+
+@keyframes pulseOpacity {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
