@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useOrbState } from "../orb/useOrbState";
 import { createLiveClient } from "@/lib/gemini";
 import { getAudioWorkletBlobUrl } from "./audioWorklet";
-import { buildSystemInstruction } from "@/lib/systemPrompt";
+import { buildSystemInstruction } from "@/lib/systemprompt";
 import { Mic, MicOff, PhoneOff, Loader2 } from "lucide-react";
 
 export function VoiceAgent() {
