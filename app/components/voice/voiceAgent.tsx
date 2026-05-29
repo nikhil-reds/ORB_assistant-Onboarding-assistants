@@ -182,18 +182,23 @@ export function VoiceAgent() {
 
   const cleanupSession = () => {
     isSessionActiveRef.current = false;
+
+    // Stop the recording worklet FIRST. Removing its message handler and
+    // disconnecting it ensures no trailing audio chunks are sent to a
+    // WebSocket that is already closing (which triggers the browser's
+    // "WebSocket is already in CLOSING or CLOSED state" warning).
+    if (workletNodeRef.current) {
+      workletNodeRef.current.port.onmessage = null;
+      workletNodeRef.current.disconnect();
+      workletNodeRef.current = null;
+    }
+
     // Disconnect websocket
     if (sessionRef.current) {
       try {
         sessionRef.current.close();
       } catch (e) {}
       sessionRef.current = null;
-    }
-
-    // Stop recording worklet
-    if (workletNodeRef.current) {
-      workletNodeRef.current.disconnect();
-      workletNodeRef.current = null;
     }
 
     // Stop mic stream
