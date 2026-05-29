@@ -257,7 +257,7 @@ export function VoiceAgent() {
       const ai = createLiveClient(token);
 
       // 4. Connect to Gemini Live API WebSocket
-      const model =process.env.NEXT_PUBLIC_GEMINI_LIVE_MODEL ||"gemini-2.0-flash-live-001";
+      const model = process.env.NEXT_PUBLIC_GEMINI_LIVE_MODEL || "gemini-3.1-flash-live-preview";
       
       // const session = await ai.live.connect({
       //   model: model,
