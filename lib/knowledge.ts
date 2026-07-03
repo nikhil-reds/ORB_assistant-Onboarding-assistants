@@ -14,48 +14,48 @@ export type SitePage = {
 export type FAQ = { q: string; a: string };
 
 // ------------------------------------------------------------
-//  The assistant fallback persona (Neha)
+//  The assistant fallback persona (Jiya)
 // ------------------------------------------------------------
 export const assistant = {
-  name: "Neha",
+  name: "Jiya",
   openingStatement:
-    "Hello! Welcome to FutureTech Solutions. I'm Neha, your HR Operations Specialist. I can guide you through our leave policies, attendance, payroll basics, and daily working hours. What would you like to explore first?",
+    "Hello! Welcome to FutureTech Solutions. I'm Jiya, your HR Operations Specialist. I can guide you through our leave policies, attendance, payroll basics, and daily working hours. What would you like to explore first?",
 };
 
 // ------------------------------------------------------------
 //  The three specialized HR onboarding assistants
 // ------------------------------------------------------------
 export const agents = {
-  neha: {
-    name: "Neha",
+  jiya: {
+    name: "Jiya",
     title: "HR Operations Specialist",
     role: "Specialist in daily HR operations, working hours, leave rules, WFH approvals, employee benefits, performance cycles, and offboarding exit procedures.",
     openingStatement:
-      "Hello! Welcome to FutureTech Solutions. I'm Neha, your HR Operations Specialist. I'm here to guide you through our working hours, attendance policies, leave rules, WFH approvals, benefits, and exit procedures. What would you like to explore first?",
+      "Hello! Welcome to FutureTech Solutions. I'm Jiya, your HR Operations Specialist. I'm here to guide you through our working hours, attendance policies, leave rules, WFH approvals, benefits, and exit procedures. What would you like to explore first?",
     accentColor: "from-emerald-400 to-teal-500",
     shadowColor: "shadow-emerald-500/20",
     bgGradient: "from-emerald-950/40 via-neutral-900 to-neutral-950",
     avatar: "👩‍💼",
     expertise: ["Leave & Attendance Policies", "Employee Benefits & Reviews", "Exit & Settlement Process"],
   },
-  amit: {
-    name: "Amit",
+  nikhil: {
+    name: "Nikhil",
     title: "Recruitment & Onboarding Coach",
     role: "Coach guiding new HR personnel through candidate sourcing, interview pipelines, offer approvals, required documents collection, and employee onboarding checklists.",
     openingStatement:
-      "Welcome aboard! I'm Amit, your Recruitment and Onboarding Coach. I'm ready to walk you through our hiring workflow, candidate levels, required onboarding documents, and employee IT/welcome checklists. What can I help you prepare today?",
+      "Welcome aboard! I'm Nikhil, your Recruitment and Onboarding Coach. I'm ready to walk you through our hiring workflow, candidate levels, required onboarding documents, and employee IT/welcome checklists. What can I help you prepare today?",
     accentColor: "from-blue-500 to-indigo-600",
     shadowColor: "shadow-blue-500/20",
     bgGradient: "from-blue-950/40 via-neutral-900 to-neutral-950",
     avatar: "👨‍💼",
     expertise: ["Hiring Workflow & Levels", "Required Joining Documents", "Onboarding Checklists"],
   },
-  karan: {
-    name: "Karan",
+  tripti: {
+    name: "Tripti",
     title: "Security & Compliance Officer",
     role: "Officer enforcing the company Code of Conduct, professional dress codes, IT asset protocols, and information security guidelines to protect confidential client and source data.",
     openingStatement:
-      "Greetings. I am Karan, Security and Compliance Officer at FutureTech Solutions. I can outline our company Code of Conduct, dress code rules, IT equipment guidelines, and information security protocols. How can I assist you with corporate compliance today?",
+      "Greetings. I am Tripti, Security and Compliance Officer at FutureTech Solutions. I can outline our company Code of Conduct, dress code rules, IT equipment guidelines, and information security protocols. How can I assist you with corporate compliance today?",
     accentColor: "from-purple-500 to-fuchsia-600",
     shadowColor: "shadow-purple-500/20",
     bgGradient: "from-purple-950/40 via-neutral-900 to-neutral-950",
