@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useOrbState, AgentId } from "@/components/orb/useOrbState";
 import { AgentSidebar } from "@/components/practise/AgentSidebar";
 import { PracticeConsole } from "@/components/practise/PracticeConsole";
-import { agents, pageIndex, SitePage } from "@/lib/knowledge";
+import { agents, pageIndex, SitePage, getAgentModules } from "@/lib/knowledge";
 import { useRouter, useSearchParams } from "next/navigation";
 
 function PracticeContent() {
@@ -20,14 +20,19 @@ function PracticeContent() {
     }
   }, [searchParams, setAgentId]);
 
-  // Set the default active module to the first page (Overview) if none is selected
+  // Set the default active module to the first page of the active agent's subset if none is selected, or if the current slug does not belong to the agent's subset
   useEffect(() => {
-    if (!activeModuleSlug && pageIndex.length > 0) {
-      setActiveModuleSlug(pageIndex[0].slug);
+    const agentModules = getAgentModules(agentId);
+    if (agentModules.length > 0) {
+      const isCurrentValid = agentModules.some((m) => m.slug === activeModuleSlug);
+      if (!activeModuleSlug || !isCurrentValid) {
+        setActiveModuleSlug(agentModules[0].slug);
+      }
     }
-  }, [activeModuleSlug, setActiveModuleSlug]);
+  }, [activeModuleSlug, agentId, setActiveModuleSlug]);
 
-  const activeModule = pageIndex.find((p) => p.slug === activeModuleSlug) || null;
+  const agentModules = getAgentModules(agentId);
+  const activeModule = agentModules.find((p) => p.slug === activeModuleSlug) || null;
 
   return (
     <div className="flex-1 flex flex-col md:flex-row h-screen overflow-hidden">
