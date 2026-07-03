@@ -4,11 +4,20 @@ import React, { useState, useRef, useEffect } from "react";
 import { useOrbState } from "../orb/useOrbState";
 import { createLiveClient } from "@/lib/gemini";
 import { getAudioWorkletBlobUrl } from "./audioWorklet";
+import { Type } from "@google/genai";
 import { buildSystemInstruction } from "@/lib/systemprompt";
 import { Mic, MicOff, PhoneOff, Loader2 } from "lucide-react";
+import { pageIndex } from "@/lib/knowledge";
 
 export function VoiceAgent() {
-  const { state, setState, setVolume, agentId } = useOrbState();
+  const {
+    state,
+    setState,
+    setVolume,
+    agentId,
+    activeModuleSlug,
+    lastActionSource,
+  } = useOrbState();
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -38,6 +47,39 @@ export function VoiceAgent() {
       cleanupSession();
     };
   }, []);
+
+  // Synchronize manual user-selected module navigation to the voice agent
+  useEffect(() => {
+    if (isConnected && sessionRef.current && activeModuleSlug) {
+      if (lastActionSource === "user") {
+        // Stop current speaking playback so agent shifts immediately
+        stopAllPlayback();
+        setState("listening");
+
+        // Find module title
+        const mod = pageIndex.find((p) => p.slug === activeModuleSlug);
+        if (mod) {
+          try {
+            sessionRef.current.sendClientContent({
+              turns: [
+                {
+                  role: "user",
+                  parts: [
+                    {
+                      text: `I have selected the module "${mod.title}" (${mod.slug}). Please explain it.`,
+                    },
+                  ],
+                },
+              ],
+              turnComplete: true,
+            });
+          } catch (e) {
+            console.error("Failed to notify agent of module change:", e);
+          }
+        }
+      }
+    }
+  }, [activeModuleSlug, isConnected, lastActionSource, setState]);
 
   // Decodes base64 PCM 24kHz data into Float32 samples
   const base64ToFloat32 = (base64: string): Float32Array => {
@@ -178,6 +220,43 @@ export function VoiceAgent() {
         setVolume(0);
       }
     }
+
+    // 4. Tool calls (function calls)
+    if (message.toolCall?.functionCalls) {
+      const functionCalls = message.toolCall.functionCalls;
+      const functionResponses: any[] = [];
+
+      for (const call of functionCalls) {
+        const { name, args, id } = call;
+        let result = { success: false, error: "Unknown function" };
+
+        if (name === "select_module" && args?.slug) {
+          const slug = args.slug as string;
+          useOrbState.getState().setActiveModuleSlug(slug, "agent");
+          result = { success: true, error: "" };
+        } else if (name === "mark_module_completed" && args?.slug) {
+          const slug = args.slug as string;
+          useOrbState.getState().markModuleCompleted(slug);
+          result = { success: true, error: "" };
+        }
+
+        functionResponses.push({
+          id,
+          name,
+          response: { output: result },
+        });
+      }
+
+      if (sessionRef.current) {
+        try {
+          sessionRef.current.sendToolResponse({
+            functionResponses,
+          });
+        } catch (e) {
+          console.error("Failed to send tool response:", e);
+        }
+      }
+    }
   };
 
   const cleanupSession = () => {
@@ -259,6 +338,9 @@ export function VoiceAgent() {
       // 4. Connect to Gemini Live API WebSocket
       const model = process.env.NEXT_PUBLIC_GEMINI_LIVE_MODEL || "gemini-3.1-flash-live-preview";
       
+      // Retrieve the current module navigation details
+      const { activeModuleSlug, completedModuleSlugs } = useOrbState.getState();
+
       // const session = await ai.live.connect({
       //   model: model,
       const session = await ai.live.connect({
@@ -266,8 +348,42 @@ export function VoiceAgent() {
         config: {
           responseModalities: ["AUDIO" as any],
           systemInstruction: {
-            parts: [{ text: buildSystemInstruction(agentId) }],
+            parts: [{ text: buildSystemInstruction(agentId, activeModuleSlug, completedModuleSlugs) }],
           },
+          tools: [
+            {
+              functionDeclarations: [
+                {
+                  name: "select_module",
+                  description: "Updates the user interface to show the selected module. Call this when shifting to explain a new module, or when the user asks to go to a module.",
+                  parameters: {
+                    type: Type.OBJECT,
+                    properties: {
+                      slug: {
+                        type: Type.STRING,
+                        description: "The slug of the module to select (e.g. '/overview', '/hiring', '/onboarding', '/leave-policy', '/attendance-policy', '/compliance-it', '/benefits', '/exit-process', '/demo-employees')",
+                      },
+                    },
+                    required: ["slug"],
+                  },
+                },
+                {
+                  name: "mark_module_completed",
+                  description: "Marks the specified module as completed. Call this when you have finished explaining the current module.",
+                  parameters: {
+                    type: Type.OBJECT,
+                    properties: {
+                      slug: {
+                        type: Type.STRING,
+                        description: "The slug of the module to mark as completed (e.g. '/overview', '/hiring', etc.)",
+                      },
+                    },
+                    required: ["slug"],
+                  },
+                },
+              ],
+            },
+          ],
         },
         callbacks: {
           onopen: () => {

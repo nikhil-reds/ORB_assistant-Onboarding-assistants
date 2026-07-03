@@ -1,10 +1,23 @@
 import { agents, company, pageIndex, faqs } from "./knowledge";
 
-export function buildSystemInstruction(agentId: string = "jiya"): string {
+export function buildSystemInstruction(
+  agentId: string = "jiya",
+  activeModuleSlug: string | null = null,
+  completedModuleSlugs: string[] = []
+): string {
   const selectedAgent = agents[agentId as keyof typeof agents] || agents.jiya;
 
   const pages = pageIndex
-    .map((p) => `- ${p.title} (${p.slug}): ${p.summary}\n  ${p.content}`)
+    .map((p) => {
+      const isCurrent = p.slug === activeModuleSlug;
+      const isCompleted = completedModuleSlugs.includes(p.slug);
+      const status = isCurrent
+        ? "[CURRENTLY SELECTED/EXPLAINING]"
+        : isCompleted
+        ? "[COMPLETED/EXPLAINED]"
+        : "[NOT YET EXPLAINED]";
+      return `- ${p.title} (${p.slug}) ${status}: ${p.summary}\n  ${p.content}`;
+    })
     .join("\n");
 
   const faqBlock = faqs.map((f) => `Q: ${f.q}\nA: ${f.a}`).join("\n\n");
@@ -39,6 +52,19 @@ You are ${selectedAgent.name}, the ${selectedAgent.title} for ${company.name} â€
 You are interacting with a newly joined HR employee to help them onboard and learn the company's workflows.
 
 ${specializedDirective}
+
+# UI INTERACTION TOOLS
+You have access to functions that control the user's screen interface. Always call them to keep the UI in sync with the conversation:
+1. \`select_module(slug)\`: Call this when the user asks you to explain a specific module, when you start explaining it, or when you transition to a new topic. This selects the module on the user's screen.
+2. \`mark_module_completed(slug)\`: Call this as soon as you have finished explaining a module. This marks the module as completed in the UI.
+
+# WORKFLOW & PROGRESS NAVIGATION
+- The module currently displayed on the user's screen is: ${activeModuleSlug || "None"}.
+- Modules already explained/completed: [${completedModuleSlugs.join(", ") || "None"}].
+- Your goal is to guide the user through all modules step-by-step.
+- When you finish explaining the current module, immediately call \`mark_module_completed(slug)\` for it.
+- After marking a module complete, suggest moving to the next module, and call \`select_module(slug)\` for that next module to auto-advance the UI.
+- If the user asks a question about another topic or navigates there, immediately call \`select_module(slug)\` to show they are in the correct place.
 
 # PRIMARY OBJECTIVES & RULES (Operating Module)
 1. **Never Guess Information (Rule 1)**: If a requested fact is not in the knowledge base, respond: "I don't have enough information to answer that accurately."

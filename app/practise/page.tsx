@@ -10,8 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 function PracticeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { agentId, setAgentId } = useOrbState();
-  const [activeModule, setActiveModule] = useState<SitePage | null>(null);
+  const { agentId, setAgentId, activeModuleSlug, setActiveModuleSlug } = useOrbState();
 
   // Sync agentId from URL search query on mount/change
   useEffect(() => {
@@ -23,10 +22,12 @@ function PracticeContent() {
 
   // Set the default active module to the first page (Overview) if none is selected
   useEffect(() => {
-    if (!activeModule && pageIndex.length > 0) {
-      setActiveModule(pageIndex[0]);
+    if (!activeModuleSlug && pageIndex.length > 0) {
+      setActiveModuleSlug(pageIndex[0].slug);
     }
-  }, [activeModule]);
+  }, [activeModuleSlug, setActiveModuleSlug]);
+
+  const activeModule = pageIndex.find((p) => p.slug === activeModuleSlug) || null;
 
   return (
     <div className="flex-1 flex flex-col md:flex-row h-screen overflow-hidden">
@@ -34,7 +35,7 @@ function PracticeContent() {
       <AgentSidebar
         agentId={agentId}
         activeModule={activeModule}
-        onSelectModule={setActiveModule}
+        onSelectModule={(mod) => setActiveModuleSlug(mod.slug, "user")}
       />
 
       {/* Main Console: Module Details & Voice ORB */}
