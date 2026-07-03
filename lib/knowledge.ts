@@ -1,278 +1,296 @@
 // ============================================================
-//  Future City Telangana — single source of truth (knowledge base)
-//  Everything the voice assistant is allowed to know and say lives
-//  in THIS file. The assistant must not use any information that is
-//  not contained below.
-//  Source: https://futurecitytg.in
+//  FutureTech Solutions Pvt. Ltd. — Onboarding Knowledge Base
+//  Single source of truth for the HR Onboarding Voice Assistant.
 // ============================================================
 
 export type SitePage = {
-  slug: string; // "/about"
+  slug: string;
   title: string;
-  summary: string; // 1–2 sentences
-  keywords: string[]; // helps retrieval & guides the model
-  content: string; // full text the model can quote
+  summary: string;
+  keywords: string[];
+  content: string;
 };
 
 export type FAQ = { q: string; a: string };
 
 // ------------------------------------------------------------
-//  The assistant persona (name + how she opens the conversation)
+//  The assistant fallback persona (Neha)
 // ------------------------------------------------------------
 export const assistant = {
-  name: "Tara",
-  // Tara speaks this FIRST, before the user says anything.
+  name: "Neha",
   openingStatement:
-    "Hello, and welcome to Future City Telangana — India's first Net-Zero Greenfield Smart City. I'm Tara, your guide. I can tell you about the project, its location, sustainability, investment opportunities, and more. What would you like to know?",
+    "Hello! Welcome to FutureTech Solutions. I'm Neha, your HR Operations Specialist. I can guide you through our leave policies, attendance, payroll basics, and daily working hours. What would you like to explore first?",
 };
 
 // ------------------------------------------------------------
-//  Company / project
+//  The three specialized HR onboarding assistants
+// ------------------------------------------------------------
+export const agents = {
+  neha: {
+    name: "Neha",
+    title: "HR Operations Specialist",
+    role: "Specialist in daily HR operations, working hours, leave rules, WFH approvals, employee benefits, performance cycles, and offboarding exit procedures.",
+    openingStatement:
+      "Hello! Welcome to FutureTech Solutions. I'm Neha, your HR Operations Specialist. I'm here to guide you through our working hours, attendance policies, leave rules, WFH approvals, benefits, and exit procedures. What would you like to explore first?",
+    accentColor: "from-emerald-400 to-teal-500",
+    shadowColor: "shadow-emerald-500/20",
+    bgGradient: "from-emerald-950/40 via-neutral-900 to-neutral-950",
+    avatar: "👩‍💼",
+    expertise: ["Leave & Attendance Policies", "Employee Benefits & Reviews", "Exit & Settlement Process"],
+  },
+  amit: {
+    name: "Amit",
+    title: "Recruitment & Onboarding Coach",
+    role: "Coach guiding new HR personnel through candidate sourcing, interview pipelines, offer approvals, required documents collection, and employee onboarding checklists.",
+    openingStatement:
+      "Welcome aboard! I'm Amit, your Recruitment and Onboarding Coach. I'm ready to walk you through our hiring workflow, candidate levels, required onboarding documents, and employee IT/welcome checklists. What can I help you prepare today?",
+    accentColor: "from-blue-500 to-indigo-600",
+    shadowColor: "shadow-blue-500/20",
+    bgGradient: "from-blue-950/40 via-neutral-900 to-neutral-950",
+    avatar: "👨‍💼",
+    expertise: ["Hiring Workflow & Levels", "Required Joining Documents", "Onboarding Checklists"],
+  },
+  karan: {
+    name: "Karan",
+    title: "Security & Compliance Officer",
+    role: "Officer enforcing the company Code of Conduct, professional dress codes, IT asset protocols, and information security guidelines to protect confidential client and source data.",
+    openingStatement:
+      "Greetings. I am Karan, Security and Compliance Officer at FutureTech Solutions. I can outline our company Code of Conduct, dress code rules, IT equipment guidelines, and information security protocols. How can I assist you with corporate compliance today?",
+    accentColor: "from-purple-500 to-fuchsia-600",
+    shadowColor: "shadow-purple-500/20",
+    bgGradient: "from-purple-950/40 via-neutral-900 to-neutral-950",
+    avatar: "👩‍🔬",
+    expertise: ["Code of Conduct & Dress Code", "IT Security Protocols", "Information Security & NDAs"],
+  },
+};
+
+// ------------------------------------------------------------
+//  Company Information
 // ------------------------------------------------------------
 export const company = {
-  name: "Future City Telangana",
-  tagline: "India's first Net-Zero Greenfield Smart City",
-  location:
-    "Between the Srisailam and Nagarjunasagar highways, spanning seven mandals in Telangana, India",
-  developer:
-    "Future City Development Authority (FCDA), under the Telangana State Government",
+  name: "FutureTech Solutions Pvt. Ltd.",
+  tagline: "Software Development & Interactive Experience Company",
+  location: "Bangalore, India (Headquarters)",
+  workingHours: "Monday to Friday, 9:30 AM – 6:30 PM (Lunch: 1:00 PM – 2:00 PM). Saturday & Sunday are holidays.",
   contact: {
-    website: "https://futurecitytg.in",
-    enquiry:
-      "Use the enquiry form on the Contact Us page of the website (fields: name, email, subject, message).",
+    website: "https://futuretechsolutions.demo",
+    enquiry: "Submit an inquiry via internal Slack channels or contact neha.k@futuretech.demo",
     social: {
-      instagram: "@futurecitytg",
-      facebook: "Futurecitytg",
-      x: "@Futurecitytg",
+      instagram: "@futuretechsol",
+      facebook: "FutureTechSolutions",
+      x: "@FutureTechSol",
     },
   },
 };
 
 // ------------------------------------------------------------
-//  Page index — the structured knowledge the model may quote
+//  Onboarding Modules (Index of Topics)
 // ------------------------------------------------------------
 export const pageIndex: SitePage[] = [
   {
-    slug: "/",
-    title: "Overview",
-    summary:
-      "Future City Telangana is India's first Net-Zero Greenfield Smart City — an integrated, sustainable city spanning 30,000 acres.",
-    keywords: [
-      "future city",
-      "telangana",
-      "net zero",
-      "smart city",
-      "greenfield",
-      "overview",
-      "what is",
-      "30000 acres",
-    ],
-    content: `Future City Telangana (also called the Fourth City) is India's first Net-Zero Greenfield Smart City. It is an integrated smart city spanning 30,000 acres, designed to achieve zero carbon emissions, energy neutrality, and sustainable waste management. The city is organised into separate residential, commercial, industrial, recreational, and green zones, and serves as a hub for industries, research institutions, residential communities, and public services with a strong focus on environmental sustainability.`,
+    slug: "/overview",
+    title: "Company Overview",
+    summary: "General details, working hours, headquarters, vision, mission, and department structure of FutureTech Solutions.",
+    keywords: ["company name", "working hours", "headquarters", "vision", "mission", "departments", "bangalore"],
+    content: `FutureTech Solutions Pvt. Ltd. is a Software Development & Interactive Experience Company based in Bangalore, India.
+Working Hours: Monday to Friday, 9:30 AM – 6:30 PM. Lunch break is from 1:00 PM to 2:00 PM. Saturday and Sunday are holidays.
+Vision: To build innovative digital products that improve businesses through technology and creativity.
+Mission: Deliver high-quality software, encourage innovation, build a healthy work culture, promote continuous learning, and maintain transparency.
+Departments:
+- Human Resources: Responsible for hiring, onboarding, leaves, performance reviews, employee relations, and exits.
+- Engineering: Handles frontend, backend, mobile, DevOps, and QA.
+- Design: Handles UI/UX, graphics, motion graphics, and branding.
+- Sales & Marketing: Handles leads, client communication, and digital branding.
+- Operations: Responsible for administrative work, asset management, and daily operations.`,
   },
   {
-    slug: "/about",
-    title: "About & Vision",
-    summary:
-      "A Net-Zero Greenfield city built from scratch on undeveloped land, managed by the Future City Development Authority (FCDA).",
-    keywords: [
-      "about",
-      "vision",
-      "net zero",
-      "greenfield",
-      "fcda",
-      "telangana government",
-      "carbon emissions",
-      "developer",
-      "who is building",
-    ],
-    content: `A "Net-Zero Greenfield City" is a city designed and developed from scratch on previously undeveloped land, with the primary objective of achieving zero carbon emissions. Future City Telangana integrates renewable energy systems, efficient waste and water management, and sustainable infrastructure so the city's carbon footprint is minimized — balancing the energy it consumes with what it produces. The planning, development, and management is handled by the Future City Development Authority (FCDA), under the guidance of the Telangana State Government.`,
+    slug: "/hiring",
+    title: "Hiring Workflow & Levels",
+    summary: "The candidate interview pipeline, employee grading levels, and lists of required documents for joining.",
+    keywords: ["hiring", "levels", "hiring workflow", "documents", "aadhaar", "pan", "passport", "certificates"],
+    content: `Employee Levels: Intern, Junior, Software Engineer, Senior Engineer, Lead, Manager, Director.
+Hiring Workflow:
+Step 1: Receive Resume
+Step 2: Screen Candidate
+Step 3: Technical Interview
+Step 4: HR Interview
+Step 5: Management Approval
+Step 6: Offer Letter
+Step 7: Document Collection
+Step 8: Employee Onboarding
+
+Required Joining Documents:
+- Aadhaar Card
+- PAN Card
+- Passport Size Photo
+- Bank Account Details
+- Educational Certificates (graduation/post-graduation)
+- Previous Experience Letter (from last employer)
+- Relieving Letter
+- Latest Resume`,
   },
   {
-    slug: "/location",
-    title: "Location & Connectivity",
-    summary:
-      "Located between the Srisailam and Nagarjunasagar highways across seven mandals, with strong highway, ring-road and future metro connectivity.",
-    keywords: [
-      "location",
-      "where",
-      "connectivity",
-      "srisailam",
-      "nagarjunasagar",
-      "orr",
-      "rrr",
-      "metro",
-      "pharma city",
-      "highway",
-    ],
-    content: `Future City Telangana is strategically located between the Srisailam and Nagarjunasagar highways, spanning across seven mandals in Telangana, in the heart of the state's upcoming development zone. It is near Hyderabad Pharma City. Connectivity is provided through major highways including the Outer Ring Road (ORR) and the Regional Ring Road (RRR), with planned metro rail extensions, greenfield corridors, smart roads, pedestrian pathways, and cycling tracks.`,
+    slug: "/onboarding",
+    title: "Onboarding Checklist",
+    summary: "Checklists for new employee preparation before joining, on their first day, and during their first week.",
+    keywords: ["onboarding", "checklist", "first day", "first week", "before joining", "equipment", "github", "slack"],
+    content: `Before Joining checklist:
+- Generate Employee ID
+- Create Official Email
+- Laptop Allocation
+- Create HRMS Account
+- Create Slack Account
+- Create GitHub Account
+- Prepare Offer Letter & NDA
+
+First Day checklist:
+- Welcome Meeting
+- Company & Team Introduction
+- Office Tour
+- HR Policy Session
+- IT Hardware & Account Setup
+- Initial Project Allocation
+
+First Week checklist:
+- Product & Project Training
+- Development Environment Setup
+- Initial Team Meetings
+- Detailed HR Orientation
+- Internal Documentation Review`,
   },
   {
-    slug: "/innovation-hubs",
-    title: "Innovation Hubs & Sectors",
-    summary:
-      "Dedicated hubs for AI, Life Sciences & Biotechnology, FinTech, Renewable Energy, Smart Manufacturing, and Advanced Urban Infrastructure.",
-    keywords: [
-      "innovation hubs",
-      "sectors",
-      "ai",
-      "artificial intelligence",
-      "life sciences",
-      "biotechnology",
-      "fintech",
-      "renewable energy",
-      "manufacturing",
-      "industries",
-    ],
-    content: `Future City Telangana promotes key sectors through dedicated innovation hubs: Artificial Intelligence (AI), Life Sciences and Biotechnology, Financial Technology (FinTech), Renewable Energy, Smart Manufacturing, and Advanced Urban Infrastructure.`,
+    slug: "/leave-policy",
+    title: "Leave Policy",
+    summary: "Annual leave allocations (casual, sick, paid), maternity/paternity allocations, and the approval chain.",
+    keywords: ["leave", "casual leave", "sick leave", "paid leave", "maternity", "paternity", "approval"],
+    content: `FutureTech Solutions Leave Allocation:
+- Casual Leave: 12 days per year
+- Sick Leave: 10 days per year
+- Paid Leave: 18 days per year
+- Maternity Leave: 26 weeks
+- Paternity Leave: 7 days
+
+Leave Approval Rules: All leaves require reporting manager approval. Approval must be requested through the HRMS platform prior to taking leave whenever possible.`,
   },
   {
-    slug: "/infrastructure",
-    title: "Infrastructure & Amenities",
-    summary:
-      "Internal roads, underground utilities, LED street lighting, parks, jogging/cycling tracks, water systems, and sustainable infrastructure.",
-    keywords: [
-      "infrastructure",
-      "amenities",
-      "roads",
-      "utilities",
-      "street lighting",
-      "parks",
-      "water",
-      "drainage",
-      "facilities",
-    ],
-    content: `Infrastructure includes internal roads (40' and 33' wide), underground utility lines, energy-efficient LED street lighting, and efficient drainage systems. Residential features include landscaped parks and green spaces, children's play areas, jogging and cycling tracks, and overhead water tanks with piped connections. Sustainable systems include rainwater harvesting, solar-powered street lights, and zero-waste management principles.`,
+    slug: "/attendance-policy",
+    title: "Attendance & WFH",
+    summary: "Daily login timings, late login grace periods, work-from-home rules, and minimum working hours.",
+    keywords: ["attendance", "grace time", "late login", "wfh", "work from home", "minimum hours"],
+    content: `Working Hours: 9:30 AM – 6:30 PM.
+Grace Time: 15 minutes (employees must log in by 9:45 AM).
+Late Login: Logging in after 9:45 AM is considered late login. Persistent late logins are subject to review.
+Work From Home (WFH): Allowed only with prior reporting manager approval. Role-based exceptions apply.
+Minimum Working Hours: Employees must log in for a minimum of 8 working hours per day to be marked present.`,
   },
   {
-    slug: "/sustainability",
-    title: "Sustainability",
-    summary:
-      "Renewable energy (solar and wind), green building standards, zero-waste policies, water conservation, and EV infrastructure.",
-    keywords: [
-      "sustainability",
-      "renewable energy",
-      "solar",
-      "wind",
-      "green building",
-      "zero waste",
-      "rainwater",
-      "ev",
-      "electric vehicle",
-      "environment",
-    ],
-    content: `The city integrates renewable energy sources such as solar and wind power, enforces green building standards, implements zero-waste policies, features water conservation and rainwater harvesting, and supports electric vehicle (EV) infrastructure. Green energy policies support renewable energy and EV adoption.`,
+    slug: "/compliance-it",
+    title: "Conduct, Dress & IT Policy",
+    summary: "Professional conduct guidelines, dress codes, IT safety, and information security regulations.",
+    keywords: ["conduct", "dress code", "it policy", "security", "passwords", "confidentiality", "nda"],
+    content: `Code of Conduct: Respect colleagues, maintain professionalism, follow policies, protect confidential info, avoid discrimination, and report unethical behavior.
+Dress Code:
+- Monday to Thursday: Business Casual
+- Friday: Smart Casual
+- Client Meetings: Formal Wear
+
+IT Policy:
+- Never share passwords or authentication credentials.
+- Always lock your computer when walking away from your desk.
+- Use company-provided devices responsibly for official work.
+- Install approved software only. Report security incidents immediately.
+
+Information Security:
+- Confidential data includes client details, source code, financial data, employee records, and internal docs.
+- Employees must never share confidential files, upload code publicly, use personal cloud storage, or share credentials.`,
   },
   {
-    slug: "/residential",
-    title: "Residential",
-    summary:
-      "Affordable housing, premium apartments, and villas with modern amenities, healthcare, education, parks and recreation.",
-    keywords: [
-      "residential",
-      "housing",
-      "homes",
-      "apartments",
-      "villas",
-      "affordable",
-      "amenities",
-      "living",
-    ],
-    content: `Future City Telangana offers affordable housing, premium apartments, and villas, equipped with modern amenities, healthcare facilities, educational institutions, parks, and recreational areas.`,
+    slug: "/benefits",
+    title: "Performance & Benefits",
+    summary: "Performance review cycles, appraisal criteria, and corporate employee benefit highlights.",
+    keywords: ["appraisal", "performance review", "evaluation", "benefits", "insurance", "reimbursement"],
+    content: `Performance Reviews:
+Frequency: Conducted every 6 months.
+Evaluation is based on: Technical Skills, Communication, Teamwork, Ownership, Problem Solving, Attendance, and Learning Ability.
+
+Employee Benefits:
+- Health Insurance cover for employee and dependents
+- Paid annual leave policy
+- Annual Learning Budget
+- Professional Certification Reimbursement
+- Structured Team Outings and dinners
+- Festival Celebrations in the office
+- Flexible Working Hours (role-based)`,
   },
   {
-    slug: "/investment",
-    title: "Investment & Land Allotment",
-    summary:
-      "Investment in industrial parks, tech hubs, commercial complexes, residential developments and public infrastructure, with FCDA single-window clearance and incentives.",
-    keywords: [
-      "investment",
-      "land allotment",
-      "investors",
-      "industrial parks",
-      "tech hubs",
-      "commercial",
-      "incentives",
-      "subsidies",
-      "tax benefits",
-      "proposals",
-      "tenders",
-      "nri",
-    ],
-    content: `Future City Telangana offers diverse investment opportunities, including industrial parks, technology hubs, commercial complexes, residential developments, and public infrastructure projects. Investors can apply for land allotment through the Future City Development Authority (FCDA); applications, proposals, and tenders are submitted via the Proposals & Tenders section on the website, supported by a single-window clearance system (TS-iPASS for industrial clearances). Incentives include subsidies on infrastructure development, priority land allotment in innovation hubs, tax benefits, and simplified regulatory procedures, with special packages for AI, FinTech, Life Sciences, and Green Technology sectors. Target investors include aspiring homeowners, long-term land investors, NRIs, businesses, startups, and industrial companies.`,
+    slug: "/exit-process",
+    title: "Exit Process",
+    summary: "The steps for resignation, knowledge transfer, asset returns, and final settlement clearances.",
+    keywords: ["exit", "resignation", "asset return", "settlement", "clearance", "kt", "experience letter"],
+    content: `Exit Process Workflow:
+Step 1: Employee submits resignation in HRMS.
+Step 2: Manager discussion and notice period confirmation.
+Step 3: Knowledge Transfer (KT) session and documentation.
+Step 4: Asset Return (laptop, ID card, accessories).
+Step 5: Exit Interview with the HR department.
+Step 6: Final Settlement calculation and payment (usually within 30-45 days).
+Step 7: Issue of Experience & Relieving Letters.`,
   },
   {
-    slug: "/approvals",
-    title: "Approvals & Legal",
-    summary:
-      "HMDA approved and RERA registered, with clear-title ownership and transparency.",
-    keywords: [
-      "approvals",
-      "legal",
-      "hmda",
-      "rera",
-      "clear title",
-      "registration",
-      "documents",
-      "transparency",
-    ],
-    content: `The project is HMDA (Hyderabad Metropolitan Development Authority) approved and RERA registered, with clear-title ownership provisions. RERA compliance ensures transparency and timely completion. The purchase process: (1) inquire about available plots and pricing, (2) schedule a site visit, (3) select a plot, (4) verify legal documents (HMDA/RERA approvals), (5) pay the booking amount, (6) complete the booking form, (7) execute remaining payment per the agreed plan, (8) finalize registration at the local sub-registrar office, and (9) receive the registered sale deed.`,
-  },
-  {
-    slug: "/contact",
-    title: "Contact",
-    summary:
-      "Reach Future City Telangana via the enquiry form on the website or its social channels.",
-    keywords: ["contact", "reach", "enquiry", "support", "social media"],
-    content: `You can reach Future City Telangana through the enquiry form on the Contact Us page of the website (fields: name, email, subject, and message). The project is also on Instagram (@futurecitytg), Facebook (Futurecitytg), and X / Twitter (@Futurecitytg). The website also has Documentation, Innovation Hubs, Proposals & Tenders, Blog, Careers, and FAQ sections.`,
+    slug: "/demo-employees",
+    title: "Demo Candidates & Staff",
+    summary: "List of dummy employee entries used for HR training and system demonstrations.",
+    keywords: ["employee list", "demo employees", "rahul", "priya", "arjun", "manager"],
+    content: `Demo Employee Database:
+1. Employee ID: EMP001
+   Name: Rahul Sharma
+   Department: Engineering
+   Role: Software Engineer
+   Joining Date: 10 Jan 2026
+   Manager: Amit Verma
+
+2. Employee ID: EMP002
+   Name: Priya Singh
+   Department: HR
+   Role: HR Executive
+   Joining Date: 15 Feb 2026
+   Manager: Neha Kapoor
+
+3. Employee ID: EMP003
+   Name: Arjun Patel
+   Department: Design
+   Role: UI Designer
+   Joining Date: 20 Mar 2026
+   Manager: Sneha Rao`,
   },
 ];
 
 // ------------------------------------------------------------
-//  FAQs (verbatim from the website FAQ page)
+//  FAQs (Copied from prompt FAQs)
 // ------------------------------------------------------------
 export const faqs: FAQ[] = [
   {
-    q: "What is Future City Telangana?",
-    a: "Future City Telangana is India's first Net-Zero Greenfield Smart City, developed to set new standards in sustainable urban living and technological innovation. Spanning 30,000 acres, the city is designed to be an integrated hub for industries, research institutions, residential communities, and public services, all while maintaining a strong focus on environmental sustainability.",
+    q: "What are company working hours?",
+    a: "FutureTech Solutions working hours are from 9:30 AM to 6:30 PM, Monday to Friday.",
   },
   {
-    q: "Who is responsible for developing Future City Telangana?",
-    a: "The Future City Development Authority (FCDA), under the guidance of the Telangana State Government, is responsible for the planning, development, and management of Future City Telangana.",
+    q: "How many casual leaves are allowed?",
+    a: "Employees are allowed 12 casual leaves per year.",
   },
   {
-    q: 'What does "Net-Zero Greenfield City" mean?',
-    a: "A Net-Zero Greenfield City is a city designed and developed from scratch on previously undeveloped land, with the primary objective of achieving zero carbon emissions. Future City Telangana integrates renewable energy systems, efficient waste and water management, and sustainable infrastructure to ensure the city's carbon footprint is minimized, ultimately balancing the energy it consumes with what it produces.",
+    q: "Who approves leave?",
+    a: "The respective reporting manager must approve all leave requests.",
   },
   {
-    q: "Where is Future City Telangana located?",
-    a: "Future City Telangana is strategically located between the Srisailam and Nagarjunasagar highways, spanning across seven mandals in Telangana. Its location ensures excellent connectivity through major highways and proximity to expanding urban centers.",
+    q: "What documents are required for joining?",
+    a: "Required documents include PAN Card, Aadhaar Card, Bank account details, Educational Certificates, Previous Experience Letter, and a passport-size photo.",
   },
   {
-    q: "What sectors are being promoted?",
-    a: "Key sectors include Artificial Intelligence (AI), Life Sciences and Biotechnology, Financial Technology (FinTech), Renewable Energy, Smart Manufacturing, and Advanced Urban Infrastructure.",
+    q: "Can employees work from home?",
+    a: "Yes, working from home (WFH) is allowed only with prior approval from the reporting manager.",
   },
   {
-    q: "What investment opportunities are available?",
-    a: "Future City Telangana offers diverse investment opportunities, including industrial parks, technology hubs, commercial complexes, residential developments, and public infrastructure projects.",
-  },
-  {
-    q: "How can an investor apply for land allotment?",
-    a: "Investors can apply through the Future City Development Authority (FCDA). Applications for land allotment, proposals, and tenders can be submitted via the Proposals & Tenders section on the website. The FCDA provides a single-window clearance system.",
-  },
-  {
-    q: "Are there incentives available for businesses?",
-    a: "Yes. Future City Telangana offers subsidies on infrastructure development, priority land allotment in innovation hubs, tax benefits, and simplified regulatory procedures. Special packages are available for AI, FinTech, Life Sciences, and Green Technology sectors.",
-  },
-  {
-    q: "What sustainability initiatives are in place?",
-    a: "The city integrates renewable energy sources such as solar and wind power, enforces green building standards, implements zero-waste policies, features water conservation and rainwater harvesting, and supports electric vehicle infrastructure.",
-  },
-  {
-    q: "What residential facilities are planned?",
-    a: "Future City Telangana offers affordable housing, premium apartments, and villas, equipped with modern amenities, healthcare facilities, educational institutions, parks, and recreational areas.",
-  },
-  {
-    q: "How will transportation and connectivity be handled?",
-    a: "The city connects through major highways including the Outer Ring Road and Regional Ring Road. Plans include metro rail extensions, greenfield corridors, smart roads, pedestrian pathways, and cycling tracks.",
+    q: "When is salary credited?",
+    a: "Salaries are credited on the last working day of every month.",
   },
 ];
