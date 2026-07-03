@@ -8,7 +8,7 @@ import { buildSystemInstruction } from "@/lib/systemprompt";
 import { Mic, MicOff, PhoneOff, Loader2 } from "lucide-react";
 
 export function VoiceAgent() {
-  const { state, setState, setVolume } = useOrbState();
+  const { state, setState, setVolume, agentId } = useOrbState();
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -266,7 +266,7 @@ export function VoiceAgent() {
         config: {
           responseModalities: ["AUDIO" as any],
           systemInstruction: {
-            parts: [{ text: buildSystemInstruction() }],
+            parts: [{ text: buildSystemInstruction(agentId) }],
           },
         },
         callbacks: {
