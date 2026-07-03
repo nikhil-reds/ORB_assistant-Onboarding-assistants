@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type OrbState = "idle" | "listening" | "thinking" | "speaking";
-export type AgentId = "neha" | "amit" | "karan";
+export type AgentId = "jiya" | "nikhil" | "tripti";
 
 type Store = {
   state: OrbState;
@@ -15,7 +15,7 @@ type Store = {
 export const useOrbState = create<Store>((set) => ({
   state: "idle",
   volume: 0,
-  agentId: "neha",
+  agentId: "jiya",
   setState: (state) => set({ state }),
   setVolume: (volume) => set({ volume }),
   setAgentId: (agentId) => set({ agentId }),
