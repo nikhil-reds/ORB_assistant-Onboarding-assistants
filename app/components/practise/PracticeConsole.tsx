@@ -18,7 +18,7 @@ export function PracticeConsole({
   activeModule,
   onBack,
 }: PracticeConsoleProps) {
-  const agent = agents[agentId] || agents.neha;
+  const agent = agents[agentId] || agents.jiya;
 
   return (
     <div className="flex-1 flex flex-col h-screen bg-black overflow-hidden relative">
