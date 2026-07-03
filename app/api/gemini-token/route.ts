@@ -8,7 +8,7 @@ export async function POST() {
       httpOptions: { apiVersion: "v1alpha" },
     });
     const token = await ai.authTokens.create({
-      config: { uses: 1, expireTime: new Date(Date.now() + 60_000).toISOString() },
+      config: { uses: 1, expireTime: new Date(Date.now() + 30 * 60_000).toISOString() },
     });
     return NextResponse.json({ token: token.name });
   } catch (error: any) {
