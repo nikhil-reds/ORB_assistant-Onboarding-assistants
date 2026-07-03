@@ -29,38 +29,41 @@ export const agents = {
   jiya: {
     name: "Jiya",
     title: "HR Operations Specialist",
-    role: "Specialist in daily HR operations, working hours, leave rules, WFH approvals, employee benefits, performance cycles, and offboarding exit procedures.",
+    role: "Specialist in general company operations, working hours, leave rules, attendance tracking, WFH guidelines, employee performance reviews, and exit clearance procedures.",
     openingStatement:
-      "Hello! Welcome to FutureTech Solutions. I'm Jiya, your HR Operations Specialist. I'm here to guide you through our working hours, attendance policies, leave rules, WFH approvals, benefits, and exit procedures. What would you like to explore first?",
+      "Hello! Welcome to FutureTech Solutions. I'm Jiya, your HR Operations Specialist. I'm here to guide you through our general company overview, leaves, WFH, performance reviews, and exit procedures. What would you like to cover first?",
     accentColor: "from-emerald-400 to-teal-500",
     shadowColor: "shadow-emerald-500/20",
     bgGradient: "from-emerald-950/40 via-neutral-900 to-neutral-950",
     avatar: "👩‍💼",
-    expertise: ["Leave & Attendance Policies", "Employee Benefits & Reviews", "Exit & Settlement Process"],
+    expertise: ["General Company Overview", "Leave & WFH Rules", "Performance & Exits"],
+    modules: ["/overview", "/leave-policy", "/attendance-policy", "/benefits", "/exit-process"],
   },
   nikhil: {
     name: "Nikhil",
-    title: "Recruitment & Onboarding Coach",
-    role: "Coach guiding new HR personnel through candidate sourcing, interview pipelines, offer approvals, required documents collection, and employee onboarding checklists.",
+    title: "Software Onboarding Coach",
+    role: "Coach guiding new HR personnel through candidate sourcing pipelines, tech screening, software engineer grading levels, required document checklists, and IDE/dev-environment welcome guides.",
     openingStatement:
-      "Welcome aboard! I'm Nikhil, your Recruitment and Onboarding Coach. I'm ready to walk you through our hiring workflow, candidate levels, required onboarding documents, and employee IT/welcome checklists. What can I help you prepare today?",
+      "Welcome aboard! I'm Nikhil, your Software Onboarding Coach. I'm ready to walk you through our software engineer interview stages, engineering grading levels, laptop setups, and coding standard workflows. What shall we explore first?",
     accentColor: "from-blue-500 to-indigo-600",
     shadowColor: "shadow-blue-500/20",
     bgGradient: "from-blue-950/40 via-neutral-900 to-neutral-950",
     avatar: "👨‍💼",
-    expertise: ["Hiring Workflow & Levels", "Required Joining Documents", "Onboarding Checklists"],
+    expertise: ["Software Hiring Pipelines", "Technical Onboarding Setup", "Coding Standards & Git"],
+    modules: ["/overview", "/software-hiring", "/software-onboarding", "/software-standards"],
   },
   tripti: {
     name: "Tripti",
-    title: "Security & Compliance Officer",
-    role: "Officer enforcing the company Code of Conduct, professional dress codes, IT asset protocols, and information security guidelines to protect confidential client and source data.",
+    title: "UI/UX & Design Onboarding Coach",
+    role: "Coach guiding new HR personnel through portfolio evaluations, design challenge guidelines, product designer grading levels, design software access (Figma/Adobe), and branding system compliance.",
     openingStatement:
-      "Greetings. I am Tripti, Security and Compliance Officer at FutureTech Solutions. I can outline our company Code of Conduct, dress code rules, IT equipment guidelines, and information security protocols. How can I assist you with corporate compliance today?",
+      "Greetings. I am Tripti, UI/UX and Design Onboarding Coach at FutureTech Solutions. I can walk you through our design team structure, designer hiring workflow, design tools setup, and brand compliance guidelines. What would you like to review first?",
     accentColor: "from-purple-500 to-fuchsia-600",
     shadowColor: "shadow-purple-500/20",
     bgGradient: "from-purple-950/40 via-neutral-900 to-neutral-950",
     avatar: "👩‍🔬",
-    expertise: ["Code of Conduct & Dress Code", "IT Security Protocols", "Information Security & NDAs"],
+    expertise: ["Design Hiring & Portfolios", "Figma & Creative Onboarding", "Brand & Design Guidelines"],
+    modules: ["/overview", "/design-hiring", "/design-onboarding", "/design-standards"],
   },
 };
 
@@ -104,59 +107,123 @@ Departments:
 - Operations: Responsible for administrative work, asset management, and daily operations.`,
   },
   {
-    slug: "/hiring",
-    title: "Hiring Workflow & Levels",
-    summary: "The candidate interview pipeline, employee grading levels, and lists of required documents for joining.",
-    keywords: ["hiring", "levels", "hiring workflow", "documents", "aadhaar", "pan", "passport", "certificates"],
-    content: `Employee Levels: Intern, Junior, Software Engineer, Senior Engineer, Lead, Manager, Director.
-Hiring Workflow:
-Step 1: Receive Resume
-Step 2: Screen Candidate
-Step 3: Technical Interview
-Step 4: HR Interview
-Step 5: Management Approval
-Step 6: Offer Letter
-Step 7: Document Collection
-Step 8: Employee Onboarding
+    slug: "/software-hiring",
+    title: "Software Hiring & Levels",
+    summary: "Engineering interview pipeline, coding test guidelines, and technical grading levels.",
+    keywords: ["software", "engineering", "hiring", "coding test", "tech screen", "pipeline", "levels"],
+    content: `Engineering Grading Levels: Intern, Junior Software Engineer, Software Engineer, Senior Software Engineer, Tech Lead, Principal Engineer, Engineering Manager, Director of Engineering.
+Hiring Pipeline:
+1. Tech Screen: Initial 30-minute resume and basic coding evaluation.
+2. Coding Challenge: Take-home challenge or 60-minute live coding session focused on Data Structures, Algorithms, and Problem Solving.
+3. System Design: 60-minute discussion evaluating architectural knowledge and scaling capabilities (for Senior positions and above).
+4. HR & Culture Fit: Final validation of alignment with company values.
+5. Management Approval: Hiring board review and formal offer release.
 
-Required Joining Documents:
-- Aadhaar Card
-- PAN Card
-- Passport Size Photo
-- Bank Account Details
-- Educational Certificates (graduation/post-graduation)
-- Previous Experience Letter (from last employer)
-- Relieving Letter
-- Latest Resume`,
+Required Documents for Engineering Joiners:
+- Aadhaar Card, PAN Card, Passport
+- Degree / Graduation Certificates
+- Relieving and Experience Letters from previous employer
+- Latest payslips (last 3 months) or Form 16`,
   },
   {
-    slug: "/onboarding",
-    title: "Onboarding Checklist",
-    summary: "Checklists for new employee preparation before joining, on their first day, and during their first week.",
-    keywords: ["onboarding", "checklist", "first day", "first week", "before joining", "equipment", "github", "slack"],
-    content: `Before Joining checklist:
-- Generate Employee ID
-- Create Official Email
-- Laptop Allocation
-- Create HRMS Account
-- Create Slack Account
-- Create GitHub Account
-- Prepare Offer Letter & NDA
+    slug: "/software-onboarding",
+    title: "Software Setup Checklist",
+    summary: "IDE setup, code repository access, dev tools, and onboarding milestones for engineers.",
+    keywords: ["ide", "git", "github", "docker", "aws", "slack", "onboarding checklist", "milestones"],
+    content: `Before Joining (Engineering):
+- Allocate development laptop (macOS or Linux).
+- Generate Employee ID and corporate email.
+- Set up accesses for GitLab/GitHub, Slack channels (#eng-announcements, #eng-support), Jira, AWS Sandbox, and VPN keys.
 
-First Day checklist:
-- Welcome Meeting
-- Company & Team Introduction
-- Office Tour
-- HR Policy Session
-- IT Hardware & Account Setup
-- Initial Project Allocation
+First Day Checklist:
+- Set up local system: VS Code or WebStorm IDE.
+- Clone core repositories and verify local build runs.
+- Install Docker, Node.js, Python, or Go dependecies depending on team.
+- Complete first day IT security orientation.
 
-First Week checklist:
-- Product & Project Training
-- Development Environment Setup
-- Initial Team Meetings
-- Detailed HR Orientation
-- Internal Documentation Review`,
+First Week Milestones:
+- Understand CI/CD pipeline structures (GitLab CI / GitHub Actions).
+- Commit your first small bug fix or documentation patch.
+- Pair program with your onboarding buddy on a minor task.`,
+  },
+  {
+    slug: "/software-standards",
+    title: "Coding Standards & IT Safety",
+    summary: "Git workflow rules, code review criteria, and security compliance for software developers.",
+    keywords: ["standards", "git", "reviews", "clean code", "security", "passwords", "compliance"],
+    content: `Git Branching Rules:
+- Never push directly to main or dev branch. All changes must go through feature branches (e.g., feature/feature-name) or bug branches (e.g., bug/bug-name).
+- Create a Pull Request (PR) and secure at least 2 peer reviews before merge.
+
+Code Quality Standards:
+- Write modular, self-documenting code.
+- Maintain at least 80% unit test coverage for new files.
+- Follow ESLint/Prettier formatting standards.
+
+IT & Cybersecurity Compliance:
+- Never commit secret API keys or credentials to Git repositories (use environment variables or AWS Secrets Manager).
+- Lock screen whenever leaving your computer (10-minute automatic lock is enforced).
+- Enable 2-Factor Authentication (2FA) on all corporate portals (Google Workspace, Slack, GitHub).`,
+  },
+  {
+    slug: "/design-hiring",
+    title: "Design Hiring & Levels",
+    summary: "Design interview stages, portfolio evaluation criteria, and creative grading levels.",
+    keywords: ["design", "ui/ux", "portfolio", "levels", "hiring pipeline", "challenge"],
+    content: `Design Grading Levels: Design Intern, Junior UI/UX Designer, Product Designer, Senior Product Designer, Lead Product Designer, Design Director.
+Hiring Pipeline:
+1. Portfolio Evaluation: Review of past work, focusing on user-centered thinking, visual execution, and case study depth.
+2. Design Screening: 30-minute introductory call to discuss design philosophy and past projects.
+3. Design Challenge: A wireframing and interactive prototyping challenge (creating user flows and UI mockups).
+4. Portfolio Review & Presentation: 60-minute session presenting the challenge solution and a deep-dive case study to the design team.
+5. HR & Offer Approval.
+
+Required Documents for Design Joiners:
+- Aadhaar Card, PAN Card, Passport
+- Portfolio Link / PDF case studies
+- Degree / Graduation Certificates (fine arts or design preferred but not mandatory)
+- Previous Experience & Relieving Letters`,
+  },
+  {
+    slug: "/design-onboarding",
+    title: "Design Setup Checklist",
+    summary: "Design tool configuration, team access, and first week design review cycles.",
+    keywords: ["figma", "adobe", "whimsical", "onboarding checklist", "milestones", "design team"],
+    content: `Before Joining (Design):
+- Allocate high-resolution display laptop (macOS MacBook Pro).
+- Generate Employee ID and corporate email.
+- Provision licenses for Figma Enterprise, Adobe Creative Cloud, Miro, and Whimsical.
+
+First Day Checklist:
+- Set up Figma account and request access to the FutureTech Design Workspace.
+- Access the corporate Google Drive branding asset folders.
+- Slack channels configuration: join #design-team, #design-system, #product-reviews.
+- Meeting with Onboarding Buddy.
+
+First Week Milestones:
+- Review existing product personas and user research findings.
+- Walkthrough of the global Figma Design System.
+- Participate in your first design critique and review session.
+- Work on a minor UX enhancement mockup.`,
+  },
+  {
+    slug: "/design-standards",
+    title: "Design System & Compliance",
+    summary: "Figma design system layout, WCAG accessibility rules, and client visual assets safety.",
+    keywords: ["figma", "design system", "accessibility", "wcag", "compliance", "branding"],
+    content: `Figma Design System Guidelines:
+- Always use the predefined color palette variables (Primary, Secondary, Neutrals, Accents).
+- Follow the 8px grid layout system for component spacing and layout alignment.
+- Use Outfit/Inter typography hierarchy scales for text formatting.
+
+Accessibility Standards (WCAG):
+- Design with a minimum contrast ratio of 4.5:1 for normal text (WCAG AA compliance).
+- Ensure target sizes for interactive components are at least 44x44px.
+
+Branding & Confidentiality Compliance:
+- Mockups containing client branding or confidential user metrics must be kept in restricted Figma folders.
+- Never upload draft designs or raw vectors to personal online clouds or public forums.
+- Export all assets using corporate naming conventions (e.g., project_asset-name_state).`,
   },
   {
     slug: "/leave-policy",
@@ -184,34 +251,13 @@ Work From Home (WFH): Allowed only with prior reporting manager approval. Role-b
 Minimum Working Hours: Employees must log in for a minimum of 8 working hours per day to be marked present.`,
   },
   {
-    slug: "/compliance-it",
-    title: "Conduct, Dress & IT Policy",
-    summary: "Professional conduct guidelines, dress codes, IT safety, and information security regulations.",
-    keywords: ["conduct", "dress code", "it policy", "security", "passwords", "confidentiality", "nda"],
-    content: `Code of Conduct: Respect colleagues, maintain professionalism, follow policies, protect confidential info, avoid discrimination, and report unethical behavior.
-Dress Code:
-- Monday to Thursday: Business Casual
-- Friday: Smart Casual
-- Client Meetings: Formal Wear
-
-IT Policy:
-- Never share passwords or authentication credentials.
-- Always lock your computer when walking away from your desk.
-- Use company-provided devices responsibly for official work.
-- Install approved software only. Report security incidents immediately.
-
-Information Security:
-- Confidential data includes client details, source code, financial data, employee records, and internal docs.
-- Employees must never share confidential files, upload code publicly, use personal cloud storage, or share credentials.`,
-  },
-  {
     slug: "/benefits",
     title: "Performance & Benefits",
     summary: "Performance review cycles, appraisal criteria, and corporate employee benefit highlights.",
     keywords: ["appraisal", "performance review", "evaluation", "benefits", "insurance", "reimbursement"],
     content: `Performance Reviews:
 Frequency: Conducted every 6 months.
-Evaluation is based on: Technical Skills, Communication, Teamwork, Ownership, Problem Solving, Attendance, and Learning Ability.
+Evaluation is based on: Technical Skills (or Design Skills), Communication, Teamwork, Ownership, Problem Solving, Attendance, and Learning Ability.
 
 Employee Benefits:
 - Health Insurance cover for employee and dependents
@@ -236,34 +282,13 @@ Step 5: Exit Interview with the HR department.
 Step 6: Final Settlement calculation and payment (usually within 30-45 days).
 Step 7: Issue of Experience & Relieving Letters.`,
   },
-  {
-    slug: "/demo-employees",
-    title: "Demo Candidates & Staff",
-    summary: "List of dummy employee entries used for HR training and system demonstrations.",
-    keywords: ["employee list", "demo employees", "rahul", "priya", "arjun", "manager"],
-    content: `Demo Employee Database:
-1. Employee ID: EMP001
-   Name: Rahul Sharma
-   Department: Engineering
-   Role: Software Engineer
-   Joining Date: 10 Jan 2026
-   Manager: Amit Verma
-
-2. Employee ID: EMP002
-   Name: Priya Singh
-   Department: HR
-   Role: HR Executive
-   Joining Date: 15 Feb 2026
-   Manager: Neha Kapoor
-
-3. Employee ID: EMP003
-   Name: Arjun Patel
-   Department: Design
-   Role: UI Designer
-   Joining Date: 20 Mar 2026
-   Manager: Sneha Rao`,
-  },
 ];
+
+export function getAgentModules(agentId: string): SitePage[] {
+  const selectedAgent = agents[agentId as keyof typeof agents];
+  const slugs = selectedAgent ? selectedAgent.modules : agents.jiya.modules;
+  return pageIndex.filter((p) => slugs.includes(p.slug));
+}
 
 // ------------------------------------------------------------
 //  FAQs (Copied from prompt FAQs)
