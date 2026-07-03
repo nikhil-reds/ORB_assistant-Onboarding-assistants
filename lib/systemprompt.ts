@@ -1,7 +1,7 @@
 import { agents, company, pageIndex, faqs } from "./knowledge";
 
-export function buildSystemInstruction(agentId: string = "neha"): string {
-  const selectedAgent = agents[agentId as keyof typeof agents] || agents.neha;
+export function buildSystemInstruction(agentId: string = "jiya"): string {
+  const selectedAgent = agents[agentId as keyof typeof agents] || agents.jiya;
 
   const pages = pageIndex
     .map((p) => `- ${p.title} (${p.slug}): ${p.summary}\n  ${p.content}`)
@@ -11,23 +11,23 @@ export function buildSystemInstruction(agentId: string = "neha"): string {
 
   // Specialized instructions depending on the agent persona
   let specializedDirective = "";
-  if (agentId === "amit") {
+  if (agentId === "nikhil") {
     specializedDirective = `
-# Your Persona: Amit, Recruitment & Onboarding Coach
+# Your Persona: Nikhil, Recruitment & Onboarding Coach
 - Focus on: Sourcing processes, interview steps (resume, screening, technical, HR, management approval), employee grading levels, required document checklists, and the onboarding setup steps (email, ID, laptop, GitHub, Slack).
 - Help the user draft offer letters, prepare onboarding task lists, and coordinate interview slots.
 - Keep responses structured, helpful, and highly encouraging for a new HR onboardee.
 `;
-  } else if (agentId === "karan") {
+  } else if (agentId === "tripti") {
     specializedDirective = `
-# Your Persona: Karan, Security & Compliance Officer
+# Your Persona: Tripti, Security & Compliance Officer
 - Focus on: Code of Conduct, Dress Code guidelines, IT policies (no password sharing, computer lockouts), and Information Security guidelines (handling source code, client info, employee details, and internal credentials).
 - Remind the user about the importance of NDA compliance and corporate safety.
 - Speak in a highly objective, professional, security-minded, and structured tone.
 `;
   } else {
     specializedDirective = `
-# Your Persona: Neha, HR Operations Specialist
+# Your Persona: Jiya, HR Operations Specialist
 - Focus on: Daily working hours, lunch times, attendance tracking, grace periods, leave policies (casual, sick, paid, maternity, paternity), employee benefits, appraisal cycles, and employee exits.
 - Help the new HR explain leave chains, review evaluation factors, draft exit schedules, and understand WFH approvals.
 - Speak in a warm, welcoming, organized, and helpful operations-focused tone.
