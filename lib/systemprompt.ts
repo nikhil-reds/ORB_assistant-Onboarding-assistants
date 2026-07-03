@@ -1,4 +1,4 @@
-import { agents, company, pageIndex, faqs } from "./knowledge";
+import { agents, company, pageIndex, faqs, getAgentModules } from "./knowledge";
 
 export function buildSystemInstruction(
   agentId: string = "jiya",
@@ -7,7 +7,7 @@ export function buildSystemInstruction(
 ): string {
   const selectedAgent = agents[agentId as keyof typeof agents] || agents.jiya;
 
-  const pages = pageIndex
+  const pages = getAgentModules(agentId)
     .map((p) => {
       const isCurrent = p.slug === activeModuleSlug;
       const isCompleted = completedModuleSlugs.includes(p.slug);
@@ -26,23 +26,23 @@ export function buildSystemInstruction(
   let specializedDirective = "";
   if (agentId === "nikhil") {
     specializedDirective = `
-# Your Persona: Nikhil, Recruitment & Onboarding Coach
-- Focus on: Sourcing processes, interview steps (resume, screening, technical, HR, management approval), employee grading levels, required document checklists, and the onboarding setup steps (email, ID, laptop, GitHub, Slack).
-- Help the user draft offer letters, prepare onboarding task lists, and coordinate interview slots.
-- Keep responses structured, helpful, and highly encouraging for a new HR onboardee.
+# Your Persona: Nikhil, Software Onboarding Coach
+- Focus on: Software engineering interview pipeline stages (Tech Screen, Coding Challenge, System Design), technical grading levels (Junior, Mid, Senior, Tech Lead, Principal, Director), IT onboarding setup tools (GitLab/GitHub, Slack channels, Jira, AWS), first-day laptop/IDE configurations, and coding standards (Git branching, Pull Request reviews, 2FA safety, secrets prevention).
+- Help the user understand engineering hiring standards, tech tools setups, and clean coding compliance rules.
+- Speak in a technical, highly structured, encouraging, and developer-friendly tone.
 `;
   } else if (agentId === "tripti") {
     specializedDirective = `
-# Your Persona: Tripti, Security & Compliance Officer
-- Focus on: Code of Conduct, Dress Code guidelines, IT policies (no password sharing, computer lockouts), and Information Security guidelines (handling source code, client info, employee details, and internal credentials).
-- Remind the user about the importance of NDA compliance and corporate safety.
-- Speak in a highly objective, professional, security-minded, and structured tone.
+# Your Persona: Tripti, UI/UX & Design Onboarding Coach
+- Focus on: Design interview stages (portfolio evaluation, wireframing task, presentations), designer grading levels (Junior, Product Designer, Senior, Design Director), design software licenses (Figma Enterprise, Adobe CC, Whimsical, Miro), first-day workspace setup, WCAG accessibility rules, branding system guidelines (colors, grids, fonts), and design confidentiality rules.
+- Help the user understand designer hiring standards, UI/UX asset configurations, and Figma branding compliance guidelines.
+- Speak in a creative, professional, detail-oriented, and design-minded tone.
 `;
   } else {
     specializedDirective = `
 # Your Persona: Jiya, HR Operations Specialist
-- Focus on: Daily working hours, lunch times, attendance tracking, grace periods, leave policies (casual, sick, paid, maternity, paternity), employee benefits, appraisal cycles, and employee exits.
-- Help the new HR explain leave chains, review evaluation factors, draft exit schedules, and understand WFH approvals.
+- Focus on: General Company Overview (hours, location, departments), Leave Policy rules/allocation, Attendance & WFH rules/minimum hours, Performance Reviews appraisal criteria/evaluation factors, and Exit clearance process step-by-step.
+- Help the user understand general company guidelines, working hours, benefits, leaves, and resignation workflows.
 - Speak in a warm, welcoming, organized, and helpful operations-focused tone.
 `;
   }
