@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AgentId, useOrbState } from "@/components/orb/useOrbState";
-import { agents, pageIndex, SitePage } from "@/lib/knowledge";
+import { agents, pageIndex, SitePage, getAgentModules } from "@/lib/knowledge";
 import { CheckCircle2, BookOpen, RefreshCw } from "lucide-react";
 
 interface AgentSidebarProps {
@@ -71,7 +71,7 @@ export function AgentSidebar({
           <div className="flex items-center gap-2">
             <BookOpen className="w-4 h-4 text-indigo-400" />
             <span className="text-xs font-semibold tracking-wider uppercase">
-              Practice Modules ({pageIndex.length})
+              Practice Modules ({getAgentModules(agentId).length})
             </span>
           </div>
           {completedModuleSlugs.length > 0 && (
@@ -87,7 +87,7 @@ export function AgentSidebar({
 
         {/* Scrollable vertical list */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-          {pageIndex.map((module) => {
+          {getAgentModules(agentId).map((module) => {
             const isActive = activeModule?.slug === module.slug;
             const isCompleted = completedModuleSlugs.includes(module.slug);
             return (
