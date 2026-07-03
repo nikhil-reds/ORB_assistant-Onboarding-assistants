@@ -16,7 +16,7 @@ export function AgentSidebar({
   activeModule,
   onSelectModule,
 }: AgentSidebarProps) {
-  const agent = agents[agentId] || agents.neha;
+  const agent = agents[agentId] || agents.jiya;
 
   return (
     <aside className="w-full md:w-80 lg:w-96 border-b md:border-b-0 md:border-r border-neutral-800 bg-neutral-950 flex flex-col h-full md:h-screen shrink-0 overflow-hidden">
